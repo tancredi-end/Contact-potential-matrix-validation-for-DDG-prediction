@@ -28,6 +28,8 @@ PART0.py = generates all the folder for the following steps. You can put it manu
 PART1.py = it makes a first generic evaluation of all the matrixes of aaindex using the wild-type pdb structure and biopython around_search_neighbors function.
 
 (for dataset S2648)
+PART2-multimodel = ONLY if you need to use rosetta since it has problem dealing with multi-model pdb files. It saves each model in a new file (1a53_A_22R_model_1, ..._model_2 etc).
+
 PART2_MODELLER.py
 PART2_ROSETTA.py = generate the mutated structures
 
