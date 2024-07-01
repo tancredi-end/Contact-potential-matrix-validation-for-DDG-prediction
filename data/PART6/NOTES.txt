@@ -1,0 +1,7 @@
+the name of pdb_modeller_0 and pdb_modeller_1 are the same to permit an easy finding the corresponding 2 matrixes to compare during calculation. 
+pdb_modeller_1 pdb files have the mutation as indicated in the DA_th1.0_s669_1 mut file and not that of the file name
+
+
+
+I know it can seem confusing.
+It was easier for me to do the following calculation to let them this way.
