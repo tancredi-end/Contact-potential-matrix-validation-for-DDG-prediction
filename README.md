@@ -20,9 +20,9 @@ calculate-single-ddg.py
 
 calculate-all-ddg.py
 
-PART3_modeller.py
+PART3-MODELLER.py
 
-PART2_pyrosetta.py
+PART2-ROSETTA.py
 
 ALL_FUNCTIONS.py contains all function used in the different scripts with the exception of "calculate-single-ddg.py" which is not a function and it's used to calculate the ddg of a single mutation and not the entire folder.
 
