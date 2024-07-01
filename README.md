@@ -29,4 +29,5 @@ ALL_FUNCTIONS.py contains all function used in the different scripts with the ex
 REMEMBER: by generating new structures, it is expected that results will differ from the ones in the "data" folder.
 
 NOTE: due to the size of the files with arrays of minimal distances between each residue, it was not possible to load them into this repository. You'll need to remake them using the calculate-distance.py script
+  
   Beware that it is a time-consuming activity.
