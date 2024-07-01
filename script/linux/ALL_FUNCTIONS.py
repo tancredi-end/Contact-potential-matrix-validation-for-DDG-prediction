@@ -1852,3 +1852,235 @@ def calculate_all_ddg(mutant_folder, pdb_no_h, mat_mut, mat_ori, aasix3, key, re
             print("--- --- ---", len(final_result))
             for koko in final_result:
                 res.write(koko+ "\n")
+
+
+###
+
+
+def calculate_all_ddg_same(mutant_folder, pdb_no_h, mat_mut, mat_ori, aasix3, key, result, choice=5):
+    '''
+    calculate the ddg of each pdb file in a folder
+
+    mutant_folder = absolute path of folder where the mutant are (.pdb)
+    pdb_no_h = absolute path of folder where original structures are (.pdb)
+    mat_mut = array of minimal distances of mutant files retrieved from a .txt file using numpy loadtxt()
+    mat_mut = array of minimal distances of original files retrieved from a .txt file using numpy loadtxt()
+    aasix3 = absolute path of the file with the contact potentials matrixes from aaindex3
+    key = list with the name of the matrix from the dictionary of dictionaries with the matrixes of contact potentials retrieved from aaindex3 (ex: BASU010101)
+            key must be a list with the name of the matrixes as items (strings type), even if you use a single matrix
+    result = absolute path of the folder where you want to save the results
+
+    choice = cutoff to consider the max distance from a residue and its neighbours. It is 5 by default
+
+    '''
+    for k in key:
+
+        #print(k)
+        dictionary = aasix_dict(aasix3)
+        foldname = os.path.basename(mutant_folder)
+        saving = f"{result}/{foldname}_{choice}A_{k}.txt"
+
+        final_result = []
+        to_list1 = os.listdir(mutant_folder)
+        for keke in to_list1:
+            file_mut = os.path.join(mutant_folder, keke)
+            name = keke.split("_")[0]
+
+
+            ########## >>> RETRIEVE ORIGINAL FILE NAMES FROM MUTATED ONE <<<
+            ######## v change wildname depending on situation
+            #wildname = f"{name}.pdb" # usually use this for names of original PDB files from RCSB. See below for other uses
+            ######## ^
+            wildname = keke # this is for reverse mutation that have files with the same names in this project
+
+            ###
+            #prepwork = keke.split("_")[:3] # this is to use PDB files with different file names during the
+            #joining1 = "_".join(prepwork[:3])
+            #wildname = f"{joining1}.pdb"
+
+            file_wild = os.path.join(pdb_no_h,wildname)
+
+
+            mut_path = f"{os.path.splitext(keke)[0]}.txt"
+            matrix_mut = os.path.join(mat_mut, mut_path)
+
+            ######## v change wild_path depending on situation
+            #wild_path = f"{name}.txt" # usually use this for names for matrix of original PDB files from RCSB. See below for other uses
+            ######## ^
+            wild_path = f"{os.path.splitext(keke)[0]}.txt"# the same apply for the matrix file name
+
+            ###
+            #wild_path = f"{joining1}.txt" # this is to use matrixes with different file names during the
+
+            matrix_wild = os.path.join(mat_ori, wild_path)
+
+            array_wild = np.loadtxt(matrix_wild)
+            array_mut = np.loadtxt(matrix_mut)
+
+            seq1,cc1,seq2,cc2 = chain_sequence(file_wild, file_mut)
+            print(seq1, len(seq1), cc1, wildname)
+            print(seq2, len(seq2), cc2, file_mut)
+
+            checkpoint = None
+            black_white = None #to change to cc1 if the mutated sequence is shorter in chained_compare_pdb_arrays
+            if len(seq1) != len(seq2):
+                print(">>> Difference length in sequences. Trying to rectify... ")
+                checkpoint = final_ignore_incomplete_residues(file_wild,file_mut)
+            if checkpoint:
+                if len(seq1) > len(seq2):
+                    black_white = True
+                    to_use_seq = list(seq1)
+                    checkpoint.sort(reverse=True)
+                    for gh in checkpoint:
+                        # print(to_use_seq)
+                        # print(gh)
+                        # print(checkpoint)
+                        del to_use_seq[gh]
+                        # print(f"> to delete position {h}")
+                        array_wild = np.delete(array_wild, gh, axis=0)
+                        array_wild = np.delete(array_wild, gh, axis=1)
+                elif len(seq1) < len(seq2):
+                    to_use_seq = list(seq2)
+                    checkpoint.sort(reverse=True)
+                    for gh in checkpoint:
+                        # print(to_use_seq)
+                        # print(gh)
+                        # print(checkpoint)
+                        del to_use_seq[gh]
+                        # print(f"> to delete position {h}")
+                        array_mut = np.delete(array_mut, gh, axis=0)
+                        array_mut = np.delete(array_mut, gh, axis=1)
+
+                to_use_seq = ''.join(to_use_seq)
+            else:
+                to_use_seq = seq1
+
+            if not black_white:
+                ddg = chained_compare_pdb_arrays(cc1, to_use_seq, seq2, array_wild, array_mut, dictionary, k, cut_off=choice)
+            else:
+                ddg = chained_compare_pdb_arrays(cc2, to_use_seq, seq2, array_wild, array_mut, dictionary, k, cut_off=choice)
+            new_line= f'{os.path.splitext(keke)[0]} {ddg}'
+            print(new_line)
+            final_result.append(new_line)
+            #if new_line in final_result:
+                #print(f"--- {keke} appended correctly to the list")
+        with open(saving, "w") as res:
+            print("--- --- ---", len(final_result))
+            for koko in final_result:
+                res.write(koko+ "\n")
+
+
+###
+
+
+def calculate_all_ddg_conseq(mutant_folder, pdb_no_h, mat_mut, mat_ori, aasix3, key, result, choice=5):
+    '''
+    calculate the ddg of each pdb file in a folder
+
+    mutant_folder = absolute path of folder where the mutant are (.pdb)
+    pdb_no_h = absolute path of folder where original structures are (.pdb)
+    mat_mut = array of minimal distances of mutant files retrieved from a .txt file using numpy loadtxt()
+    mat_mut = array of minimal distances of original files retrieved from a .txt file using numpy loadtxt()
+    aasix3 = absolute path of the file with the contact potentials matrixes from aaindex3
+    key = list with the name of the matrix from the dictionary of dictionaries with the matrixes of contact potentials retrieved from aaindex3 (ex: BASU010101)
+            key must be a list with the name of the matrixes as items (strings type), even if you use a single matrix
+    result = absolute path of the folder where you want to save the results
+
+    choice = cutoff to consider the max distance from a residue and its neighbours. It is 5 by default
+
+    '''
+    for k in key:
+
+        #print(k)
+        dictionary = aasix_dict(aasix3)
+        foldname = os.path.basename(mutant_folder)
+        saving = f"{result}/{foldname}_{choice}A_{k}.txt"
+
+        final_result = []
+        to_list1 = os.listdir(mutant_folder)
+        for keke in to_list1:
+            file_mut = os.path.join(mutant_folder, keke)
+            name = keke.split("_")[0]
+
+
+            ########## >>> RETRIEVE ORIGINAL FILE NAMES FROM MUTATED ONE <<<
+            ######## v change wildname depending on situation
+            #wildname = f"{name}.pdb" # usually use this for names of original PDB files from RCSB. See below for other uses
+            ######## ^
+            #wildname = keke # this is for reverse mutation that have files with the same names in this project
+
+            ###
+            prepwork = keke.split("_")[:3] # this is to use PDB files with different file names during the
+            joining1 = "_".join(prepwork[:3])
+            wildname = f"{joining1}.pdb"
+
+            file_wild = os.path.join(pdb_no_h,wildname)
+
+
+            mut_path = f"{os.path.splitext(keke)[0]}.txt"
+            matrix_mut = os.path.join(mat_mut, mut_path)
+
+            ######## v change wild_path depending on situation
+            #wild_path = f"{name}.txt" # usually use this for names for matrix of original PDB files from RCSB. See below for other uses
+            ######## ^
+            #wild_path = f"{os.path.splitext(keke)[0]}.txt"# the same apply for the matrix file name
+
+            ###
+            wild_path = f"{joining1}.txt" # this is to use matrixes with different file names during the
+
+            matrix_wild = os.path.join(mat_ori, wild_path)
+
+            array_wild = np.loadtxt(matrix_wild)
+            array_mut = np.loadtxt(matrix_mut)
+
+            seq1,cc1,seq2,cc2 = chain_sequence(file_wild, file_mut)
+            print(seq1, len(seq1), cc1, wildname)
+            print(seq2, len(seq2), cc2, file_mut)
+
+            checkpoint = None
+            black_white = None #to change to cc1 if the mutated sequence is shorter in chained_compare_pdb_arrays
+            if len(seq1) != len(seq2):
+                print(">>> Difference length in sequences. Trying to rectify... ")
+                checkpoint = final_ignore_incomplete_residues(file_wild,file_mut)
+            if checkpoint:
+                if len(seq1) > len(seq2):
+                    black_white = True
+                    to_use_seq = list(seq1)
+                    checkpoint.sort(reverse=True)
+                    for gh in checkpoint:
+                        # print(to_use_seq)
+                        # print(gh)
+                        # print(checkpoint)
+                        del to_use_seq[gh]
+                        # print(f"> to delete position {h}")
+                        array_wild = np.delete(array_wild, gh, axis=0)
+                        array_wild = np.delete(array_wild, gh, axis=1)
+                elif len(seq1) < len(seq2):
+                    to_use_seq = list(seq2)
+                    checkpoint.sort(reverse=True)
+                    for gh in checkpoint:
+                        # print(to_use_seq)
+                        # print(gh)
+                        # print(checkpoint)
+                        del to_use_seq[gh]
+                        # print(f"> to delete position {h}")
+                        array_mut = np.delete(array_mut, gh, axis=0)
+                        array_mut = np.delete(array_mut, gh, axis=1)
+
+                to_use_seq = ''.join(to_use_seq)
+            else:
+                to_use_seq = seq1
+
+            if not black_white:
+                ddg = chained_compare_pdb_arrays(cc1, to_use_seq, seq2, array_wild, array_mut, dictionary, k, cut_off=choice)
+            else:
+                ddg = chained_compare_pdb_arrays(cc2, to_use_seq, seq2, array_wild, array_mut, dictionary, k, cut_off=choice)
+            new_line= f'{os.path.splitext(keke)[0]} {ddg}'
+            print(new_line)
+            final_result.append(new_line)
+            #if new_line in final_result:
+                #print(f"--- {keke} appended correctly to the list")
+        with open(saving, "w") as res:
+            print("--- --- ---", len(final_result))
+            for koko in final_result:
+                res.write(koko+ "\n")
