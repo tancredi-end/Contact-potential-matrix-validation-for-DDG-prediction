@@ -1,0 +1,33 @@
+Here is the correct order to run the many scripts to auomatize the process.
+Linux folder are scripts for linux systems.
+Windows folders has scripts for windows systems.
+
+IMPORTANT: each file.py contains an object called "main_dir" which refers to the directory where all the files used are (where you are working essentially). 
+It must be MANUALLY changed to your selected absolute path for each file.py using a text editor.
+
+Also, the rest of the path used refers to the folder name generated in PART0.
+
+NOTE: the predicted structure generated must maintain a specific naming convention:
+id-name_chain_residue-position_mutated-aminoacid.pdb
+
+so it comes out something like:
+1a43_A_218S.pdb
+
+for multiple mutations:
+1a43_A_218S_219S_220Y.pdb
+
+If there are any error, let me know.
+
+#############################################################
+#############################################################
+#############################################################
+GUIDE: follow the order
+
+PART0.py = generates all the folder for the following steps. You can put it manually in the main_dir line or through the input line that comes out. Paste the absolute path
+
+PART1.py = it makes a first generic evaluation of all the matrixes of aaindex using the wild-type pdb structure and biopython around_search_neighbors function.
+
+PART2_MODELLER.py
+PART2_ROSETTA.py = generate the mutated structures
+
+PART2-prep = prepare files for the next steps (deletes hydrogens atom mainly)
