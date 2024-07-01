@@ -23,7 +23,7 @@ If there are any error, let me know.
 #############################################################
 GUIDE: follow the order
 
-PART0.py = generates all the folder for the following steps. You can put it manually in the main_dir line or through the input line that comes out. Paste the absolute path
+PART0.py = generates all the folders for the following steps. You can put it manually in the main_dir line or through the input line that comes out. Paste the absolute path
 
 PART1.py = it makes a first generic evaluation of all the matrixes of aaindex using the wild-type pdb structure and biopython around_search_neighbors function.
 
