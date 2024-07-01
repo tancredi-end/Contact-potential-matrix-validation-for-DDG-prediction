@@ -33,10 +33,25 @@ PART2_multimodel.py = ONLY if you need to use rosetta since it has problem deali
 PART2-MODELLER.py
 PART2-ROSETTA.py = generate the mutated structures
 
-PART2_prep = prepare files for the next steps (deletes hydrogens atom mainly)
+PART2_check.py = OPTIONAL. Checks if the mutations were applied correctly for each file.
 
-PART2_distance = calculate the minimal distance between each residue of the protein. It is a time-consuming process.
+PART2_prep.py = prepare files for the next steps (deletes hydrogens atom mainly)
 
-PART2_ddg = calculate the ddg for each variant and save them in a file.
+PART2_distance.py = calculate the minimal distance between each residue of the protein. It saves them in a form to be used with numpy.loadtxt() function. It is a time-consuming process.
 
-PART2_pearson = calculate linear coefficient between experimental and predicted ddgs.
+PART2_ddg.py = calculate the ddg for each variant and save them in a file.
+
+PART2_pearson.py = calculate linear coefficient between experimental and predicted ddgs.
+
+(for dataset Protherm_multiple)
+PART3-MODELLER.py = generate mutations.
+
+PART3_prep.py = prepare files.
+
+PART3_distance.py = make arrays.
+
+PART3_ddg.py = calculate ddgs.
+
+PART3_pearson = pearson.
+
+PART4-REV-MODELLER.py = regenerate wild-type sequences. Use dto check anti-symmetry property. The new files have the same file of the mutated ones even if the residue is different. I know it can be confusing but it was easier to compare each file correctly
