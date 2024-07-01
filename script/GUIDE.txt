@@ -54,4 +54,23 @@ PART3_ddg.py = calculate ddgs.
 
 PART3_pearson = pearson.
 
-PART4-REV-MODELLER.py = regenerate wild-type sequences. Use dto check anti-symmetry property. The new files have the same file of the mutated ones even if the residue is different. I know it can be confusing but it was easier to compare each file correctly
+PART4-REV-MODELLER.py = regenerate wild-type sequences. Use to check anti-symmetry property. The new files have the same file of the mutated ones even if the residue is different. I know it can be confusing but it was easier to compare each file correctly
+
+PART4_distance.py = make arrays.
+
+PART4_ddg.py = calculate ddgs.
+
+PART4_pearson = pearson. This ones use a function to calculate ddg slightly different since the "wild-type" file are not named with only the id_name like 1a43.
+
+(For dataset S669)
+PART5_prep.py = ATTENTION,here the script works a bit differently from the precedent ones. It both delets hydrogens and hetatm since the latter gave problems to a few mutations during generation.
+  If you want to apply the passage the same as the other ones, comment the sv.del_hydro(filename) line, delete hetatm, generate structure with the next file, then re-activate sv.del_hydro(filename) and run this   again.
+
+PART5-MODELLER.py = same as before
+
+PART5_distance.py
+
+PART5_ddg.py 
+
+PART5_pearson.py
+
