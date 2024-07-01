@@ -28,4 +28,4 @@ cutoff = 5 # put here the desired cut-off for ddg calculation. the default value
 ##############################################################################################
 #CALULATE DDG
 
-af.calculate_all_ddg(modeller,pdb_no_h,mat_mut,mat_ori,aasix3,key, result, choice=cutoff)
+af.calculate_all_ddg_same(modeller,pdb_no_h,mat_mut,mat_ori,aasix3,key, result, choice=cutoff)
