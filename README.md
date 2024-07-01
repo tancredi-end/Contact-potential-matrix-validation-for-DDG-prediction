@@ -13,11 +13,11 @@ The scripts named "PART" should automatically reproduce the passages to generate
 More information on the correct order and on what each script does into the GUIDE.txt file.
 
 The main scripts for generic use (outside the 3 used dataset if needed) are:
-Calculate-distance.py
-calculate-single-ddg.py
-calculate-all-ddg.py
-PART3_modeller.py
-PART2_pyrosetta.py
+Calculate-distance.py \n
+calculate-single-ddg.py \n
+calculate-all-ddg.py \n
+PART3_modeller.py \n
+PART2_pyrosetta.py \n
 
 ALL_FUNCTIONS.py contains all function used in the different scripts with the exception of "calculate-single-ddg.py" which is not a function and it's used to calculate the ddg of a single mutation and not the entire folder.
 
